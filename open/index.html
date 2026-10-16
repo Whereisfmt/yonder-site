@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'sha256-SAJGx75kM1kQ+KW9cj+0tazk/r7BaOOGS7Fji1h+eBs='; base-uri 'none'; form-action 'none'">
 <meta name="robots" content="noindex">
 <title>Open in Yonder - Yonder: Countdown Widget</title><link rel="stylesheet" href="../style.css"></head>
 <body><main>
-<nav><a href="../">Yonder</a><span><a href="nl/" hreflang="nl" lang="nl">Nederlands</a></span></nav>
+<nav><a href="../">Yonder</a><span><a id="lang" href="nl/" hreflang="nl" lang="nl">Nederlands</a></span></nav>
 <h1>Open this countdown in Yonder</h1>
 <p>Someone shared a countdown with you. Tap the button to open it in the Yonder app. You will see a preview first and nothing is saved until you tap Add.</p>
-<p><a id="open" href="yonder://add" style="display:inline-block;padding:14px 28px;border-radius:999px;background:#D4452F;color:#fff;font-weight:700;text-decoration:none">Open in Yonder</a></p>
+<p><a id="open" href="yonder://add" class="btn">Open in Yonder</a></p>
 <h2>Nothing happens?</h2>
 <p>Yonder needs to be installed on this iPhone. If you do not have it yet, get Yonder: Countdown Widget from the App Store, then open this link again. This page only works on an iPhone with Yonder.</p>
 <p id="store" hidden><a id="storelink" href="#">Get Yonder: Countdown Widget on the App Store</a></p>
@@ -14,17 +15,20 @@
 <footer>Yonder: Countdown Widget. Made by FM Business Solutions.</footer>
 </main>
 <script>
-// The only script on this page: pass the share query on to the app. Nothing is sent anywhere, nothing is stored.
+// The only script on this page. The countdown travels in the URL fragment (after #), which the browser never sends to any server.
+// Nothing is sent anywhere, nothing is stored. The app opens only after a tap (an automatic redirect shows "address is invalid" in Safari when the app is missing).
 (function () {
   var APP_STORE_URL = ""; // fill in when the App Store page exists
-  var target = "yonder://add" + window.location.search;
-  document.getElementById("open").href = target;
+  var hash = window.location.hash.slice(1);
+  var open = document.getElementById("open");
+  var target = "yonder://add" + (hash ? "?" + hash : "");
+  open.href = target;
+  var lang = document.getElementById("lang");
+  if (lang && hash) { lang.href = lang.getAttribute("href") + "#" + hash; }
   if (APP_STORE_URL) {
-    var s = document.getElementById("store");
     document.getElementById("storelink").href = APP_STORE_URL;
-    s.hidden = false;
+    document.getElementById("store").hidden = false;
   }
-  if (window.location.search.length > 1) { window.location.href = target; }
 })();
 </script>
 </body></html>

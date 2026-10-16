@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'sha256-SAJGx75kM1kQ+KW9cj+0tazk/r7BaOOGS7Fji1h+eBs='; base-uri 'none'; form-action 'none'">
 <meta name="robots" content="noindex">
 <title>Openen in Yonder - Yonder: Countdown Widget</title><link rel="stylesheet" href="../../style.css"></head>
 <body><main>
-<nav><a href="../../">Yonder</a><span><a href="../" hreflang="en" lang="en">English</a></span></nav>
+<nav><a href="../../">Yonder</a><span><a id="lang" href="../" hreflang="en" lang="en">English</a></span></nav>
 <h1>Open dit aftelmoment in Yonder</h1>
 <p>Iemand heeft een aftelmoment met je gedeeld. Tik op de knop om het te openen in de Yonder-app. Je ziet eerst een voorbeeld en er wordt niets opgeslagen voordat je op Toevoegen tikt.</p>
-<p><a id="open" href="yonder://add" style="display:inline-block;padding:14px 28px;border-radius:999px;background:#D4452F;color:#fff;font-weight:700;text-decoration:none">Open in Yonder</a></p>
+<p><a id="open" href="yonder://add" class="btn">Open in Yonder</a></p>
 <h2>Gebeurt er niets?</h2>
 <p>Yonder moet op deze iPhone staan. Heb je de app nog niet, haal dan Yonder: Countdown Widget uit de App Store en open daarna deze link opnieuw. Deze pagina werkt alleen op een iPhone met Yonder.</p>
 <p id="store" hidden><a id="storelink" href="#">Haal Yonder: Countdown Widget in de App Store</a></p>
@@ -14,17 +15,20 @@
 <footer>Yonder: Countdown Widget. Made by FM Business Solutions.</footer>
 </main>
 <script>
-// The only script on this page: pass the share query on to the app. Nothing is sent anywhere, nothing is stored.
+// The only script on this page. The countdown travels in the URL fragment (after #), which the browser never sends to any server.
+// Nothing is sent anywhere, nothing is stored. The app opens only after a tap (an automatic redirect shows "address is invalid" in Safari when the app is missing).
 (function () {
   var APP_STORE_URL = ""; // fill in when the App Store page exists
-  var target = "yonder://add" + window.location.search;
-  document.getElementById("open").href = target;
+  var hash = window.location.hash.slice(1);
+  var open = document.getElementById("open");
+  var target = "yonder://add" + (hash ? "?" + hash : "");
+  open.href = target;
+  var lang = document.getElementById("lang");
+  if (lang && hash) { lang.href = lang.getAttribute("href") + "#" + hash; }
   if (APP_STORE_URL) {
-    var s = document.getElementById("store");
     document.getElementById("storelink").href = APP_STORE_URL;
-    s.hidden = false;
+    document.getElementById("store").hidden = false;
   }
-  if (window.location.search.length > 1) { window.location.href = target; }
 })();
 </script>
 </body></html>
