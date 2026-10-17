@@ -18,7 +18,7 @@
 // The only script on this page. The countdown travels in the URL fragment (after #), which the browser never sends to any server.
 // Nothing is sent anywhere, nothing is stored. The app opens only after a tap (an automatic redirect shows "address is invalid" in Safari when the app is missing).
 (function () {
-  var APP_STORE_URL = ""; // fill in when the App Store page exists
+  var APP_STORE_URL = "https://apps.apple.com/app/id6823762712"; // fill in when the App Store page exists
   var hash = window.location.hash.slice(1);
   var open = document.getElementById("open");
   var target = "yonder://add" + (hash ? "?" + hash : "");
